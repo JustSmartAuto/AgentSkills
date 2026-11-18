@@ -1,0 +1,11 @@
+d:\JustSmart\261010优易达安全带\.trae\openness\obj\Release\TiaExport.csproj.AssemblyReference.cache
+d:\JustSmart\261010优易达安全带\.trae\openness\obj\Release\TiaExport.GeneratedMSBuildEditorConfig.editorconfig
+d:\JustSmart\261010优易达安全带\.trae\openness\obj\Release\TiaExport.AssemblyInfoInputs.cache
+d:\JustSmart\261010优易达安全带\.trae\openness\obj\Release\TiaExport.AssemblyInfo.cs
+d:\JustSmart\261010优易达安全带\.trae\openness\obj\Release\TiaExport.csproj.CoreCompileInputs.cache
+d:\JustSmart\261010优易达安全带\.trae\openness\bin\Release\TiaExport.exe.config
+d:\JustSmart\261010优易达安全带\.trae\openness\bin\Release\TiaExport.exe
+d:\JustSmart\261010优易达安全带\.trae\openness\bin\Release\TiaExport.pdb
+d:\JustSmart\261010优易达安全带\.trae\openness\obj\Release\TiaExport.exe
+d:\JustSmart\261010优易达安全带\.trae\openness\obj\Release\TiaExport.pdb
+d:\JustSmart\261010优易达安全带\.trae\openness\obj\Release\TiaExport.exe.config

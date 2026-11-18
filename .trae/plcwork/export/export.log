@@ -1,0 +1,12 @@
+[1] Creating TIA Portal session (TiaPortalMode.WithoutUserInterface) ...
+FATAL: [0] Siemens.Engineering.EngineeringSecurityException: Security error.
+
+Can't access this process to acquire needed information.
+
+Security error.
+
+Owner 'THINKBOOK14\Lenovo' of this process is not member of the windows group 'Siemens TIA Openness'. Please contact your administrator.
+       在 Siemens.Engineering.Private.ApplicationEntryPoint.global::Siemens.Engineering.Loader.IAppSupport.Initialize(Process portalProcess, Boolean isAttachingToAlreadyRunningTiaPortal)
+       在 Siemens.Engineering.TiaPortal..ctor(Process process, Boolean isAttachingToAlreadyRunningTiaPortal)
+       在 TiaExport.Program.Run(String[] args) 位置 d:\JustSmart\261010优易达安全带\.trae\openness\Program.cs:行号 97
+

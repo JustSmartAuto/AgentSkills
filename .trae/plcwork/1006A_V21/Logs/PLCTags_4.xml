@@ -1,0 +1,55 @@
+<?xml version="1.0" standalone="no"?>
+<?xml-stylesheet type='text/xsl' href='MassDataHandlerLogFile.xsl'?>
+<LogFile titleName="PLCTags_4.xml" projectName="C:\Users\YC-DQ-F03\Desktop\桂林航天\PLCTags.xlsx" typeText="类型" messageText="消息" timeText="时间">
+  <LogEntry type="Warning" dateTime="18:30:14">
+    <Message>无法导入工作表 "PLC Tags" 行 7 中指定的变量。</Message>
+  </LogEntry>
+  <LogEntry type="Warning" dateTime="18:30:14">
+    <Message>无法导入工作表 "PLC Tags" 行 8 中指定的变量。</Message>
+  </LogEntry>
+  <LogEntry type="Warning" dateTime="18:30:14">
+    <Message>无法导入工作表 "PLC Tags" 行 9 中指定的变量。</Message>
+  </LogEntry>
+  <LogEntry type="Warning" dateTime="18:30:14">
+    <Message>无法导入工作表 "PLC Tags" 行 21 中指定的变量。</Message>
+  </LogEntry>
+  <LogEntry type="Warning" dateTime="18:30:14">
+    <Message>无法导入工作表 "PLC Tags" 行 33 中指定的变量。</Message>
+  </LogEntry>
+  <LogEntry type="Warning" dateTime="18:30:14">
+    <Message>无法导入工作表 "PLC Tags" 行 37 中指定的变量。</Message>
+  </LogEntry>
+  <LogEntry type="Warning" dateTime="18:30:14">
+    <Message>无法导入工作表 "PLC Tags" 行 42 中指定的变量。</Message>
+  </LogEntry>
+  <LogEntry type="Warning" dateTime="18:30:14">
+    <Message>无法导入工作表 "PLC Tags" 行 43 中指定的变量。</Message>
+  </LogEntry>
+  <LogEntry type="Warning" dateTime="18:30:14">
+    <Message>无法导入工作表 "PLC Tags" 行 44 中指定的变量。</Message>
+  </LogEntry>
+  <LogEntry type="Warning" dateTime="18:30:14">
+    <Message>无法导入工作表 "PLC Tags" 行 45 中指定的变量。</Message>
+  </LogEntry>
+  <LogEntry type="Warning" dateTime="18:30:14">
+    <Message>无法导入工作表 "PLC Tags" 行 46 中指定的变量。</Message>
+  </LogEntry>
+  <LogEntry type="Warning" dateTime="18:30:14">
+    <Message>无法导入工作表 "PLC Tags" 行 47 中指定的变量。</Message>
+  </LogEntry>
+  <LogEntry type="Warning" dateTime="18:30:14">
+    <Message>无法导入工作表 "PLC Tags" 行 48 中指定的变量。</Message>
+  </LogEntry>
+  <LogEntry type="Warning" dateTime="18:30:14">
+    <Message>无法导入工作表 "PLC Tags" 行 49 中指定的变量。</Message>
+  </LogEntry>
+  <LogEntry type="Warning" dateTime="18:30:15">
+    <Message>无法导入工作表 "PLC Tags" 行 63 中指定的变量。</Message>
+  </LogEntry>
+  <LogEntry type="Warning" dateTime="18:30:15">
+    <Message>无法导入工作表 "PLC Tags" 行 64 中指定的变量。</Message>
+  </LogEntry>
+  <LogEntry type="Warning" dateTime="18:30:15">
+    <Message>无法导入工作表 "PLC Tags" 行 65 中指定的变量。</Message>
+  </LogEntry>
+</LogFile>

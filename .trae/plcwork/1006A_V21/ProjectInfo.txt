@@ -1,0 +1,23 @@
+TiaPortal:
+  MinimumRequired:
+  - Version: V21.0
+  - TechnicalVersion: 21.00.00.00
+  LastUsed:
+  - Version: V21
+  - TechnicalVersion: 21.00.00.00
+
+UsedProducts:
+- Name: STEP 7 Basic
+  Version: V21
+  TechnicalVersion: 21.00.00.00
+- Name: Totally Integrated Automation Portal
+  Version: V21
+  TechnicalVersion: 21.00.00.00
+
+UsedSupportPackages:
+- Name: gsdml-v2.3-keyence-dl-pn1-20250729.xml
+  Version: 1.0
+  TechnicalVersion: 11.0.0.0.0
+- Name: gsdml-v2.32-siemens-sinamics_v90-20180321.xml
+  Version: 1.0
+  TechnicalVersion: 11.0.0.0.0

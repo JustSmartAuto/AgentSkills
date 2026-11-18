@@ -1,0 +1,759 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type='text/xsl' href='ConversionLogFile.xsl'?>
+<LogFile projectName="20260511_V21" typeText="类型" messageText="消息" timeText="时间">
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:01:40">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="已开始升级" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:01:40">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目升级的起始版本：2000.0.9501.1。" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:01:43" Debug="false">
+    <Text>Reorganization succeed!</Text>
+  </Details>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:01:43">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="CheckRepair lost+found objects" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:01:44" Debug="false">
+    <Text>No error is detected.</Text>
+  </Details>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:01:45">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="CheckRepair missing bidirectional links" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:01:45" Debug="false">
+    <Text>No error is detected.</Text>
+  </Details>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:01:46">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="CheckRepair clear segment flags" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:01:46" Debug="false">
+    <Text>No error is detected.</Text>
+  </Details>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:01:56">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="用户已使用所需的工程组态权限“升级项目”登录。" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:01:57">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="正在移除旧的系统角色。" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:01:57">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="移除旧的系统角色操作已完成。" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:01:57">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="将删除不在支持的工程组态权限。" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:01:57">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="不再支持的工程组态权限已删除。" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:01:57">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="将删除系统定义的运行系统权限。" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:01:57">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="删除系统运行系统权限已完成。" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:01:57">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="开始更改 DFR 与 DFRSet 间的链接" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:01:57">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="Finished change link between DFR and DFRSet" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:09">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\功能块\相机”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:10">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\功能块\相机”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:11">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\功能块\DD马达”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:11">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\功能块\DD马达”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:11">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\轴控制\DD马达汇总”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:11">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\轴控制\DD马达汇总”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:11">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\功能块\双手启动”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:11">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\功能块\双手启动”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\轴控制\轴汇总”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\轴控制\轴汇总”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\ST8_手动”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\ST8_手动”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\功能块\fb6GBL_SINA_POS”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\功能块\fb6GBL_SINA_POS”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\自动\ST2_工位动作”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\自动\ST2_工位动作”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\配方选择”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\配方选择”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\功能块\fc1GBL_PositionOK”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\功能块\fc1GBL_PositionOK”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\功能块\fc1GBL_PositionOK”- “StructureMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\ST6_手动”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\ST6_手动”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\ST7_手动”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\ST7_手动”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\ST5_手动”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\ST5_手动”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\ST4_手动”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\ST4_手动”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\ST3_手动”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\ST3_手动”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\Main”- “Event”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\Main”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\复位\ST1_初始化”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\复位\ST2_初始化”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\复位\ST2_初始化”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\ST1_手动”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\ST2_手动”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\功能块\气缸功能块”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\功能块\气缸功能块”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\A1_报警”- “General; VersionControlInterface”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\A1_报警”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\主控\主控”- “CallerMemoryLayout”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\复位\DB块\ST1_初始化_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\复位\DB块\ST2_初始化_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\自动\工位动作DB\ST1_工位动作_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\DB块\ST1_手动_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\DB块\ST2_手动_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\DB块\ST4_手动_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\DB块\ST5_手动_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\DB块\ST6_手动_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\DB块\ST7_手动_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\DB块\ST8_手动_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\主控\主控_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:13">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\A1_工位变量\A1_ST4变量”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\A1_工位变量\A1_ST3变量”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\A1_工位变量\A1_ST2变量”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\A1_工位变量\A1_ST1变量”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\A1_工位变量\A1全局变量”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\A1_工位变量\A1配方全局变量”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\A1_报警_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\轴控制\伺服DB\轴汇总_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\轴控制\伺服DB\轴控制_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\A1_工位变量\A1_ST5变量”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\A1_工位变量\A1_ST6变量”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\A1_工位变量\A1_ST7变量”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\A1_工位变量\A1_ST8变量”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\A1_工位变量\A1_ST9变量”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\A1_工位变量\A1_ST10变量”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\自动\工位动作DB\ST2_工位动作_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\A1\电磁阀\DB块\ST3_手动_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ProgramBlocksFolder\SystemBlocksFolder\ProgramResourcesFolder\PLC_2_Receive_DB”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\工位状态”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\HMI主控”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴位置监控”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\全局状态”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\通用参数”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴手动OUT”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴\Jog”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴\MoveRelative”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴\MoveAbsolute”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴\Stop”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴\Reset”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\DD马达_OUT”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\DD马达_IN”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴\FB284\FB284_SINA_POS_IN”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴\FB284\FB284_SINA_POS_OUT”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴\HP_OUT”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\设备维护计数”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴\HP_IN”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴参数”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\手动”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴模式限位”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴控制”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\生产状态”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\A_移位”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴手动IN”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴\Power”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴\Home”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\轴\HP”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Warning" Timestamp="2026/5/12 21:02:14">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目元素：“\PLC_2\ControllerDataTypeFolder\配方参数”- “General”的校验和不一致." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:02:16">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="正在转换交叉引用信息。" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:02:17">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="交叉引用信息已成功创建." />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:02:17">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="交叉引用信息转换完成。" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.ET200SP.SM_DO.MDD_6ES7132-6BH01-0BA0_0.0_16.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.ET200SP.SM_DI.MDD_6ES7131-6BH01-0BA0_0.0_16.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.ET200SP.SUBMODULES.ProfinetIO.Port.MDD_6ES7-155-6AU00-0CN0-Sub-Ports_RJ45_V2.0_15.0.10' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.ET200SP.SUBMODULES.ProfinetIO.Adapter.CuAdapter.MDD_6ES7-193-6AR00-0AA0-Sub-Adapter_15.0.10' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.ET200SP.HM_PN.MDD_6ES7_155_6AU01_0BN0_V4.2_16.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.ET200SP.RACK.MDD_ET200SP-Rack_1.0_15.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.ET200SP.DEVICE.MDD_ET200SP-Device_1.0_15.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'Siemens.Simatic.Tech.StandardMotionControl.V17' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.S71500.CPU.CPU_1511_1_PN.MDD_6ES7511-1AK01-0AB0_2.9_20.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.GSD.gsdml-v2.4-inovance-sv660f-20240629.xml.DEVICE_1.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.GSD.gsdml-v2.43-sdot-xb6s-pn2002-20260107.xml.DEVICE_1.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.S71500.CPU.CPU_1511T_1_PN.MDD_6ES7511-1TK01-0AB0_2.9_20.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.S71500.Submodules.CPU.IE.Virtual_Interface.Port.MDD_VirtualCPInterfacePort_Submodule_V2.8_16.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.S71500.RACK.MDD_6ES5xx-xxxxx-xxxx_1.0_16.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.SENTRON.7KM.PAC.BaseUnit.MDD_7KM211x_xBA00_xAA0_V2.4_20.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.SENTRON.7KM.PAC.SubModule.Head.MDD_7KMxxxx_xBx00_xAA0_SubHead_V1.0_20.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.SENTRON.7KM.PAC.Rack.MDD_SENTRON_7KM_PAC_Rack_V1.0_17.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.SENTRON.7KM.PAC.Device.MDD_SENTRON_7KM_PAC_Device_V1.0_14.0.1' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'Siemens.Simatic.Lang.S7PSW.V20.0.0.0.NonMandatory' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.S71500.CPU.CPU_1511_1_PN.MDD_6ES7511-1AK00-0AB0_1.8_14.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.S71500.RACK.MDD_6ES5xx-xxxxx-xxxx_1.0_14.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Package container 'HW.S71500.DEVICE.MDD_S71500-Device_1.0_15.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.Hmi.Basic:15.01.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.STEP7.SinemaEBasic:15.01.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.STEP7.Basic:15.01.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.Tech.StandardMotionControl:17.00.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'HW.GSD.gsdml-v2.4-inovance-sv660f-20240629.xml.DEVICE_1.0.0.Product:11.0.0.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'HW.GSD.gsdml-v2.43-sdot-xb6s-pn2002-20260107.xml.DEVICE_1.0.0.Product:11.0.0.0.0' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.STEP7.Professional:16.00.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.Hmi.Basic:16.00.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.STEP7.SinemaEBasic:16.00.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.Hmi.Basic:20.00.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.STEP7.SinemaEBasic:20.00.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.Hmi.Basic:17.00.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.STEP7.SinemaEBasic:17.00.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.Hmi.Basic:14.00.01.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.STEP7.SinemaEBasic:14.00.01.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.STEP7.Basic:14.00.01.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.STEP7.Professional:20.00.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.STEP7.Professional:14.00.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.Hmi.Basic:14.00.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.STEP7.SinemaEBasic:14.00.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.Hmi.Basic:15.00.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.STEP7.SinemaEBasic:15.00.00.00' was deleted</Text>
+  </Details>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:17" Debug="false">
+    <Text>Product version 'Siemens.Simatic.STEP7.Basic:15.00.00.00' was deleted</Text>
+  </Details>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:02:18">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="项目升级的目标版本：2100.0.121.1。" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <MessageCell ServiceId="Automation-ObjectFrame-Feedbacks" MessageId="ConversionInfoTabProjectSucceeded" MessageClass="Success" Timestamp="2026/5/12 21:02:18">
+    <Number ServiceNumber="80" MessageNumber="34" />
+    <Text FeedbackText="项目“C:\Users\YC-DQ-F03\Desktop\桂林航天\新写程序\1005A\20260511\System\PEData.plf”已成功升级并另存为项目“C:\Users\YC-DQ-F03\Desktop\桂林航天\新写程序\1005A\20260511_V21\System\PEData.plf”。" />
+    <Help HelpId="-1" HelpFile="" />
+  </MessageCell>
+  <MessageCell ServiceId="80" MessageId="30" MessageClass="Information" Timestamp="2026/5/12 21:02:19">
+    <Number ServiceNumber="80" MessageNumber="30" />
+    <Text FeedbackText="FinalCheckRemainingErrors" />
+    <Help HelpId="-1" />
+  </MessageCell>
+  <Details ServiceId="80" MessageId="30" Timestamp="2026/5/12 21:02:19" Debug="false">
+    <Text>No error is detected.</Text>
+  </Details>
+</LogFile>

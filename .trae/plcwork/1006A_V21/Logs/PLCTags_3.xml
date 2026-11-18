@@ -1,0 +1,7 @@
+<?xml version="1.0" standalone="no"?>
+<?xml-stylesheet type='text/xsl' href='MassDataHandlerLogFile.xsl'?>
+<LogFile titleName="PLCTags_3.xml" projectName="C:\Users\YC-DQ-F03\Desktop\桂林航天\PLCTags.xlsx" typeText="类型" messageText="消息" timeText="时间">
+  <LogEntry type="Error" dateTime="18:26:54">
+    <Message>工作表 "PLC Tags" 没有所需格式。</Message>
+  </LogEntry>
+</LogFile>
