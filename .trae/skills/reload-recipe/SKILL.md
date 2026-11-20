@@ -31,6 +31,8 @@ description: 让运行中的安全带检测软件从磁盘重新加载配方（�
 
 ## 方式二：MQTT 软件功能控制
 
+> 完整的指令清单、账户登录与权限（`login` / `logout` / `get_user` / `force_ok`）见 `mqtt-commands` 技能。
+
 - 请求主题：`/SeatBeltInspection/cli/raw`
 - 回执主题：`/SeatBeltInspection/cli/result`
 
@@ -74,6 +76,44 @@ mosquitto_pub -h 127.0.0.1 -p 8907 -t "/SeatBeltInspection/cli/raw" \
   -m "{\"id\":\"t3\",\"cmd\":\"reload_all\"}"
 ```
 
+### 方式二-b：本机 paho-mqtt 直接发（推荐，无需工控机装 mosquitto_pub）
+
+本机已装 `paho-mqtt`，工控机 mosquitto 默认 `allow_anonymous true`，直接 publish 即可：
+
+```python
+import paho.mqtt.publish as pub
+import json
+
+# 重载型号A
+msg = {'id': 'qs1', 'cmd': 'reload_recipe', 'productType': '型号A'}
+pub.single('/SeatBeltInspection/cli/raw', json.dumps(msg), hostname='192.168.1.34', port=8907)
+print('OK')
+```
+
+一行命令（PowerShell）：
+
+```powershell
+python -c "import paho.mqtt.publish as pub,json; pub.single('/SeatBeltInspection/cli/raw', json.dumps({'id':'qs1','cmd':'reload_recipe','productType':'型号A'}), hostname='192.168.1.34', port=8907); print('OK')"
+```
+
+**排错**：如果 connect 被拒（CONNACK reason code=2），可能是 `allow_zero_length_clientid` 未开启，paho-mqtt 会自动生成随机 clientId，一般不受影响。
+
+### 方式二-c：工控机本机没有 python / paho 时，用裸 TCP 发 MQTT 帧
+
+工控机上 `python -c "import paho.mqtt.publish"` 常报 `ModuleNotFoundError: No module named 'paho'`，
+此时用 PowerShell 的 `TcpClient` 直接写一个 QoS0 的 PUBLISH 包即可，不必装任何东西：
+
+```powershell
+& "d:\JustSmart\261010优易达安全带\.trae\skills\vpp-toolblock-scripts\scripts\Send-MqttReload.ps1" -ProductType "型号A"
+```
+
+两个必踩的坑：
+
+1. **函数参数不能叫 `$host`**——PowerShell 内置只读变量，赋值直接报
+   `Cannot overwrite variable host because it is read-only or constant`，改名 `$mqttHost`。
+2. **中文 payload 不要走命令行拼接**：用 `@{...} | ConvertTo-Json -Compress` 生成后
+   `[Text.Encoding]::UTF8.GetBytes()` 编码，否则产品名里的中文在传参途中就被打坏。
+
 ### 回执
 
 ```json
@@ -97,3 +137,6 @@ mosquitto_pub -h 127.0.0.1 -p 8907 -t "/SeatBeltInspection/cli/raw" \
 | `Success=false` 且 Message 为反序列化异常 | 配方文件损坏或外部写坏，保留现场并用 `vpp-toolblock-scripts` 的回读校验排查 |
 | MQTT 无回执 | 检查 Broker 地址/端口、`EnableMqttCommand`；连接失败会每 5 秒重试，日志里搜索 `MQTT 命令通道` |
 | 重载后结果仍是旧的 | 确认改的是软件实际加载的那份配方文件；确认没有在重载前做过“保存配方” |
+| 工控机 `import paho` 报 `ModuleNotFoundError` | 不要装 paho，改用方式二-c 的裸 TCP 脚本 |
+| 发 MQTT 时 `Cannot overwrite variable host` | 参数改名 `$mqttHost`（PowerShell 内置只读变量） |
+| 验证阈值是否生效时 `GlobalKV.Instance.GetAll().Count == 0` | 正常：GlobalKV 是进程内单例，外部进程读不到；靠界面「快速设置」或跑一次检测验证 |

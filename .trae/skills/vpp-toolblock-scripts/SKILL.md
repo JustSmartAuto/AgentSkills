@@ -1,6 +1,6 @@
 ---
 name: vpp-toolblock-scripts
-description: 远程读取或修改 Cognex VisionPro 配方(.Vproj/.vpp)里 ToolBlock 内嵌的 C# 脚本，自动备份、编译校验、回读校验后替换；也涵盖面积阈值判定、新增输入终端、把阈值放进软件「快速设置」表格等结构性修改的经验。用于排查"某个面报错导致后续面不执行"、批量给 ToolBlock 加判空/异常隔离等场景。不适用于纯 VisionPro 界面操作（如修改输入终端绑定）。
+description: 远程读取或修改 Cognex VisionPro 配方(.Vproj/.vpp)里 ToolBlock 内嵌的 C# 脚本，自动备份、编译校验、回读校验后替换；也涵盖面积阈值判定、新增输入终端、把阈值放进软件「快速设置」表格、以及把参数读取从 Inputs 层层下发迁移到各块直读 GlobalKV 等结构性修改的经验。用于排查"某个面报错导致后续面不执行"、批量给 ToolBlock 加判空/异常隔离、TempCompile 失败（缺程序集引用）等场景。不适用于纯 VisionPro 界面操作（如修改输入终端绑定）。
 ---
 
 # VPP ToolBlock 脚本读写
@@ -9,7 +9,8 @@ description: 远程读取或修改 Cognex VisionPro 配方(.Vproj/.vpp)里 ToolB
 所有读写都在工控机上通过 `VppTool.exe`（本地 `scripts\VppTool.cs` 远端 csc 编译）完成，
 传输/编译/执行/回传由 `scripts\Invoke-VppOnIpc.ps1` 编排。
 
-需要**改终端/加快速设置**（而不只是改脚本）时见第 7 节；面积、斑点这类判定模式见 6.6 节。
+需要**改终端/加快速设置**（而不只是改脚本）时见第 7 节；面积、斑点这类判定模式见 6.6 节；
+把阈值从「Inputs 层层下发」改成「各块直读 GlobalKV」见第 8 节。
 
 ## 0. 先确认
 
@@ -76,8 +77,9 @@ $s = "d:\JustSmart\261010优易达安全带\.trae\skills\vpp-toolblock-scripts\s
      -AutoReload:$false
 ```
 
-`apply` 依次做：备份原文件（含同目录 `<配方名>_*.json`）→ 打补丁 → 逐块 `TempCompile()`
-→ 保存到 `<配方>.new` → 重新加载回读比对 → **全部一致才替换原文件**。
+`apply` 依次做：备份原文件（含同目录 `<配方名>_*.json`）→ 打补丁 →
+**给每个被补丁的块补上 `JustSmart.GlobalKV.dll` 引用（3.5 步，见坑 #18）** →
+逐块 `TempCompile()` → 保存到 `<配方>.new` → 重新加载回读比对 → **全部一致才替换原文件**。
 任一步失败都会退出，原配方不动，新文件留在 `.new`。
 
 apply 成功后（退出码 0），脚本会**自动通过 MQTT 发送 `reload_recipe` 命令**重载配方到运行中软件的内存，
@@ -105,9 +107,16 @@ MQTT 命令：topic `/SeatBeltInspection/cli/raw`，payload `{"id":"vr1","cmd":"
 3. **类型解析**：反序列化前把 bin 目录下 `JustSmart*.dll` 全部 `LoadFrom`，并挂
    `AppDomain.AssemblyResolve` 在 bin 目录 + VisionPro `ReferencedAssemblies` 里找 DLL，
    否则 `ToolBlockConfig` 之类解析不到。
-4. **中文字符串**：远端 `.ps1` 必须存成 UTF-8 **带 BOM**，否则 PowerShell 5.1 按 GBK 读，
-   含中文的路径（如 `型号A.Vproj`）会变成乱码；HTTP Shell 的 `/download` 对中文路径也会乱码，
-   所以 `Invoke-VppOnIpc.ps1` 一律打包 zip 再用 ASCII 名下载。
+4. **中文字符串**：远端 `.ps1` **和 `.cs` 都必须存成 UTF-8 带 BOM**，否则 PowerShell 5.1 / csc
+   按 GBK 读，含中文的路径（如 `型号A.Vproj`）会变成乱码；
+   远端 `csc` 编译带中文注释的 `.cs` 时若无 BOM，报的错非常误导——表现为
+   `CS0246: 未能找到类型或命名空间名称"List"/"Dictionary"`（`using System.Collections.Generic;` 被 GBK 解码搞坏），
+   而不是报"编码错误"。本机上传前统一转 BOM：
+   ```powershell
+   $c = [IO.File]::ReadAllText($p)
+   [IO.File]::WriteAllText($p, $c, (New-Object Text.UTF8Encoding($true)))
+   ```
+   HTTP Shell 的 `/download` 对中文路径也会乱码，所以 `Invoke-VppOnIpc.ps1` 一律打包 zip 再用 ASCII 名下载。
 5. **脚本对象可能是 null**。没有脚本的 ToolBlock `Script == null`，不能直接赋值 `.Source`；
    要用模板块的 `References` / `Language` 造 `CogScriptSupport(string, ArrayList, Language)`
    再赋给 `Script`（`VppTool` 的 `apply` 已实现，map 第 3 列触发）。
@@ -171,6 +180,40 @@ MQTT 命令：topic `/SeatBeltInspection/cli/raw`，payload `{"id":"vr1","cmd":"
     正确写法：`foreach (ICogTool tool in mToolBlock.Tools)`，需要工具名时用 `tool.Name`；
     需要按名字取工具时才用 `mToolBlock.Tools[name]`（此时 name 必须是你自己知道的字符串）。
     这个错误编译期完全正常，**必须在代码审查时按模式搜 `foreach (string` 自查**。
+18. **给脚本加程序集引用（`Script.References`）不能"无参构造 + 设属性"**。
+    `Cognex.VisionPro.Implementation.Internal.CogReferencedAssembly` **没有任何无参构造函数**，
+    且 **全部属性只读**（`Name` / `DirectoryPath` / `FullName` / `ExpandedFullName` /
+    `DirectoryPathType` 都是 `canW=False`）。实测可用构造只有三个：
+
+    | 构造函数 | 说明 |
+    |---|---|
+    | `ctor(Assembly assembly)` | **推荐**，直接 `Assembly.LoadFrom(dllPath)` 后传进去 |
+    | `ctor(string name, string dirPath, CogReferencedAssemblyPathConstants pathEnum)` | 枚举值含义未验证 |
+    | `ctor(SerializationInfo, StreamingContext)` | 反序列化用 |
+
+    正确写法（`VppTool.cs` 3.5 步已实现）：
+    ```csharp
+    Assembly gkvAsm = Assembly.LoadFrom(dllPath);                 // 先真正加载
+    object newRef = Activator.CreateInstance(cogRefAsmType, gkvAsm); // ctor(Assembly)
+    ((IList)blk.Script.References).Add(newRef);                   // References 是 ArrayList
+    ```
+    症状：`ADD-REF FAILED create: 没有为该对象定义无参数的构造函数`，随后
+    `TempCompile=False` + `ScriptError` 里一堆 `CS0246`（因为 `using` 的命名空间解析不到）。
+    **必须先加引用再 TempCompile**，顺序颠倒必然全红。
+
+    排查手段：`apply.log` 里 3.5 步会打印探测到的 `--- ctors ---` 与 `--- props ---`，
+    换 VisionPro 版本后先看这段，别凭记忆写反射。
+19. **工控机上不一定有 python / paho-mqtt**。`python -c "import paho..."` 报
+    `ModuleNotFoundError` 时，用 PowerShell 原生 `TcpClient` 直接发 MQTT PUBLISH 帧即可
+    （QoS0 单包，够用），见 [`scripts/Send-MqttReload.ps1`](scripts/Send-MqttReload.ps1)。
+    两个必踩的坑：函数参数**不能叫 `$host`**（PowerShell 内置只读变量，赋值直接报
+    `Cannot overwrite variable host`），名字改成 `$mqttHost`；payload 里含中文时
+    必须显式 `[Text.Encoding]::UTF8.GetBytes(...)`，不要让 Python 命令行拼中文。
+20. **`GlobalKV` 是进程内静态单例，跨进程读不到**。在 HTTP Shell 里
+    `Add-Type -Path JustSmart.GlobalKV.dll` 然后 `[JustSmart.GlobalKv.GlobalKV]::Instance.GetAll().Count`
+    得到 `0` 是**正常的**——那是 PowerShell 进程自己的单例，跟运行中的 `JustSmart.App` 无关。
+    验证只能靠：软件界面「快速设置」表格有值、跑一次手动检测看 `Output_BLXM`/日志、
+    或让软件自己通过 MQTT 回执暴露状态。
 
 ## 4. 能力边界
 
@@ -195,6 +238,11 @@ MQTT 命令：topic `/SeatBeltInspection/cli/raw`，payload `{"id":"vr1","cmd":"
 | `TempCompile=False` | 补丁脚本语法/类型错误，看 `apply.log` 里 `ScriptError` 的 `error CS...` 行 |
 | `回读校验不通过` | 序列化/反序列化不一致，保留 `.new` 供人工比对，原文件未被改 |
 | 远端 `COMPILE FAILED` | 看 `csc.txt`；通常是 VisionPro `ReferencedAssemblies` 路径变了 |
+| 远端 `CS0246 List / Dictionary` | `.cs` 没存 UTF-8 BOM，中文注释把 `using` 行搞坏了（坑 #4） |
+| `ADD-REF FAILED create: 没有为该对象定义无参数的构造函数` | `CogReferencedAssembly` 无无参构造且属性只读，必须用 `ctor(Assembly)`（坑 #18） |
+| 补丁里 `using 自定义命名空间` 后 `TempCompile=False`，`CS0246` 指向该命名空间 | DLL 没加进 `Script.References`；看 `apply.log` 的 ADD-REF 段（坑 #18） |
+| HTTP Shell 里读 `GlobalKV.Instance.GetAll().Count == 0` | 正常，跨进程读不到（坑 #20），不是发布失败 |
+| `Cannot overwrite variable host` | PowerShell 内置只读变量，MQTT 函数参数改叫 `$mqttHost`（坑 #19） |
 
 ## 6. 实用模式速查
 
@@ -491,3 +539,112 @@ foreach (ICogTool tool in mToolBlock.Tools)
 3. MQTT `reload_recipe` 成功（`Success=true`）；
 4. **跑一次真实检测**，看日志里的判定串是否带出面积数值（`BLXM=...织物面积总和超限(斑点合计N>阈值M)`），
    数值量级合理再定阈值；`取不到面积`（-1）说明 Blob 链路或遍历方式有问题，先解决再谈阈值。
+
+### 7.5 已验证的快速设置批量添加工具
+
+`d:\JustSmart\261010优易达安全带\.trae\quick-setup-patch\VppPatchQuickSetup.cs`
+是 2026-11-18 实测通过的结构补丁程序，可直接复用。它基于 `VppTool.cs` 的验证模式：
+
+- `STAThread` + `WindowsFormsSynchronizationContext`（必须，否则 VisionBlocks=0）
+- `BinaryFormatter` + `AssemblyResolve` 兜底搜索 `JustSmart*` + VisionPro DLL
+- `SaveRecipe` / `LoadRecipe` 回读比对，Input 数量 + QuickSettings 数量一致才替换原文件
+- 备份落到 `backup/型号A_yyyyMMdd_HHmmss.Vproj`
+
+关键实现要点：
+
+1. **AssemblyResolve 必须同时搜 VisionPro ReferencedAssemblies 和 JustSmart bin 目录**：
+   配方里的 `RecipeConfig` / `ToolBlockConfig` / `QuickSetting_ToolBlock` 是 JustSmart 类型，
+   序列化时 BinaryFormatter 会触发 AssemblyResolve，搜不到就跳过、VisionBlocks 变空。
+2. **先 `Assembly.LoadFrom` 预加载** 再反射找类型，`AppDomain.CurrentDomain.GetAssemblies()` 里才有。
+3. **CogToolBlockTerminal 构造函数**：`new CogToolBlockTerminal(name, typeof(double))`，然后 `.Value = 500.0`。
+4. **QuickSetting_ToolBlock 构造函数参数是 TagBlockName**（根块名，通常是 `"检测"`）。
+5. **新增终端的索引 = 原有 Inputs.Count**（先 dump 确认原值，再推算新增项的 Path）。
+
+使用流程：
+
+```powershell
+# 1. 上传 VppPatchQuickSetup.cs 到工控机
+curl.exe -X POST "http://<ip>:10022/upload" -F "file=@VppPatchQuickSetup.cs" -F "path=D:\Temp\vppquickset/"
+
+# 2. csc 编译（VisionPro DLL 从 ReferencedAssemblies 引用）
+csc /nologo /target:exe /out:Patch.exe /r:System.Windows.Forms.dll /r:"C:\Program Files\Cognex\VisionPro\ReferencedAssemblies\Cognex.VisionPro.dll" /r:"...Core.dll" /r:"...ToolGroup.dll" D:\Temp\vppquickset\VppPatchQuickSetup.cs
+
+# 3. 运行（参数: <vproj> <workDir> <appBinDir>）
+.\Patch.exe "C:\JustSmart\Configs\Recipes\型号A.Vproj" "D:\Temp\vppquickset" "D:\JustSmartAuto\...\bin\x64\Release"
+
+# 4. 本机 paho-mqtt 发重载命令
+python -c "import paho.mqtt.publish as pub,json; pub.single('/SeatBeltInspection/cli/raw', json.dumps({'id':'p1','cmd':'reload_recipe','productType':'型号A'}), hostname='<ip>', port=8907); print('OK')"
+```
+
+如果工控机上没有 python / paho，改用 `scripts\Send-MqttReload.ps1`（裸 TCP 发 MQTT 帧，坑 #19）：
+
+```powershell
+& "d:\JustSmart\261010优易达安全带\.trae\skills\vpp-toolblock-scripts\scripts\Send-MqttReload.ps1" -ProductType "型号A"
+```
+
+## 8. 参数迁移：从「Inputs 层层下发」改为「各块直读 GlobalKV」
+
+老写法是：快速设置绑根块终端 → 根块脚本读出来 → `PushInput` 下发到面块 → 面块再下发给各结果块。
+链路长、任何一环改块名/终端名就静默断掉。改为**每个检测块脚本自己直接读 GlobalKV 单例**，
+只需保证脚本里有 `using JustSmart.GlobalKv;` 且 `Script.References` 里有 `JustSmart.GlobalKV.dll`（坑 #18）。
+
+### 8.1 脚本侧写法
+
+```csharp
+using JustSmart.GlobalKv;
+
+// key 必须与软件「快速设置」表格里 QuickSetting 的 Name 属性完全一致（含中文和斜杠）
+double threshold = GlobalKV.Instance.GetDouble("主体顶面/织物划伤检测1/面积阈值", 500.0);
+int    pPan      = GlobalKV.Instance.GetInt32("主体后侧面/R标检测/数量阈值", 1);
+string label     = GlobalKV.Instance.GetString("某键", "默认值");
+bool   enable    = GlobalKV.Instance.GetBoolean("某开关", true);
+```
+
+- API：`GetDouble` / `GetInt32` / `GetString` / `GetBoolean` / `Get<T>` / `TryGet<T>` / `SetValue(key, value)` / `GetAll()`。
+- **默认值必须写生产合理值**：键不存在时（配方刚换、软件版本没发布）会静默用默认值，不会报错。
+- 迁移后根块/面块的 `ReadDouble + PushInput` 逻辑可以整段删掉，别再保留双份来源，
+  否则两种来源会打架（快速设置改的是 GlobalKV，根块下发的是旧终端值）。
+
+### 8.2 需要同时改的地方（一次改齐，别只改一半）
+
+1. **快速设置必须先存在**：GlobalKV 的键就是 `QuickSetting_ToolBlock.Name`。
+   没有的话先按 7.2 把快速设置落盘，再让软件把值发布进 GlobalKV。
+2. **每个真正做判定的块**都要改成直读（结果块、SimpleScript 块都算），
+   不能只改父块——父块不再下发，结果块的输入就永远是默认值。
+3. **`patch_map.tsv` 一行一个块**，本文实测一次改了 13 个块（根块 + 4 面块 + 8 个判定/结果块）。
+4. **`Script.References` 加 DLL 由 `VppTool.cs` 3.5 步自动做**，前提是 `appBin` 目录里有
+   `JustSmart.GlobalKV.dll`；没有就从软件 bin 目录拷一份过去。
+
+### 8.3 验收
+
+1. `apply.log`：每个块 `ADD-REF via ctor(Assembly) OK` → `TempCompile=True` → `VERIFY match=True`；
+2. `Send-MqttReload.ps1` 或自动重载返回成功；
+3. **在软件界面「快速设置」表格里改一个阈值 → 手动检测一次**，看判定串里的数值是否跟着变。
+   这一步不可省：`GlobalKV.Instance.GetAll().Count` 在外部进程里读到 0 是正常的（坑 #20），
+   不能用它判断发布是否成功。
+
+### 8.4 发布时机与已验证的行为
+
+`QuickSettingGlobalKv`（`JustSmart.VisionCenter.ResourceMgr`）在四处发布，改完配方无需额外操作：
+
+| 时机 | 入口 |
+|---|---|
+| 配方加载/重载（含 MQTT `reload_recipe`） | `ProjectMgr.LoadRecipe` → `QuickSettingGlobalKv.PublishAll(ProjectObj)` |
+| 界面新增参数项 | `QuickSettingEditor.Click_AddQuickSetting` → `Publish` |
+| 界面删除参数项 | `Click_RemoveQuickSetting` → `Unpublish` |
+| 改参数名 / 改值 | `QuickSetting_ToolBlock.Name` / `Value` 的 setter |
+
+2026-11 实测（`型号A`，20 项快速设置）：进程内反序列化配方 → `ApplyTo` → `PublishAll`
+后 `GlobalKV.Count == 20`，值与终端一致（面积 500、Blob 1、得分 0.6、R标 0.5）。
+
+已修复的两个健壮性缺陷（若换环境后仍出现「一个键都没有」或「脚本一直读默认值」，先查这两点）：
+
+1. `PublishAll` 里**单个参数取值异常会中断整轮发布**（`setting.Value` 的 `TagBlock` 解析在 try 之外）。
+   现在逐个 `try/catch` 隔离，失败只打印 `[WARN] 快速设置发布失败：<键> - <原因>`。
+2. **取值为 null 时也写入 GlobalKV**，脚本 `GetDouble` 读到 null 就退回默认值，表现为「设置没生效」。
+   现在 null 直接跳过，保留上一次的有效值。
+
+这两处改动在 `QuickSettingGlobalKv.cs` / `QuickSetting_ToolBlock.cs`。改完必须重编译
+`JustSmart.VisionCenter.ResourceMgr`（`MSBuild <csproj> /p:Configuration=Release /p:Platform=x64`），
+再把 `bin\x64\Release\JustSmart.VisionCenter.ResourceMgr.dll` 覆盖到软件 bin：
+软件运行中 DLL 被占用无法直接覆盖，可先 `Move-Item` 成 `.dll.old` 再拷新文件（**重启软件后生效**）。

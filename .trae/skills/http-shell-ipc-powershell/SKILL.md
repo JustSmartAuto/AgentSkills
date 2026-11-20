@@ -129,9 +129,208 @@ curl.exe -sS -X POST "http://192.168.1.100:10022/rfb/file/download" -H "Content-
 curl.exe -X POST "http://192.168.1.100:10022/rfb/file/upload" -F "file=@.\a.bat" -F "path=X:\Temp\a.bat"
 ```
 
+### 5.1 用 git patch 把本地改动同步到工控机（增量部署）
+
+场景：本地改了十几个 .cs 文件，不想 robocopy 整目录、也不想等 Git push 之后工控机 pull。**直接生成 diff patch、上传、远端 `git apply`**——只传增量、速度快、可回滚。
+
+#### 第一步：本机生成 patch
+
+```powershell
+cd "D:\JustSmart\261010优易达安全带\CodeBase\SeatBeltInspection_2611161017"
+$patchPath = "$env:TEMP\feat_my_changes.patch"
+$env:GIT_PAGER = "cat"
+
+# 1) untracked 新文件先登记为 intent-to-add，git diff 才会输出其内容
+$newFiles = @(
+  "JustSmart.App/I18nHelper.cs",
+  "JustSmart.App/WPFForm/ProcessingHintWindow.cs"
+) | Where-Object { Test-Path $_ }
+if ($newFiles.Count -gt 0) { git add -N -- $newFiles }
+
+# 2) 让 git 直接把 patch 写到文件（--output），不经过 PowerShell 字符串中转
+git diff HEAD -- JustSmart.App/ README.md --output=$patchPath
+
+# 3) 还原索引（git add -N 只是临时标记）
+if ($newFiles.Count -gt 0) { git reset -q -- $newFiles }
+
+Write-Host "Patch: $patchPath ($((Get-Item $patchPath).Length) bytes)"
+```
+
+要点：
+- **必须用 `git diff --output=<file>`**：Windows PowerShell 5.1 接收外部进程 stdout 时按 ANSI(GBK) 解码，UTF-8 中文注释会变乱码，落盘后的 patch 在远端 `git apply` 报 `patch failed at ...:1`；`--output` 由 git 直接写字节，天然保留编码。
+- **以下两种写法都会产出不可用的 patch，禁止使用**：
+  - `$sb.Append($modified)`：`$modified = git diff ...` 是字符串数组，`Append` 会把字面量 `System.Object[]` 写进 patch；
+  - `git diff ... 2>&1 | Out-String`：会把 PowerShell 的 warning/错误记录（含“所在位置 行:xx”）混进 patch，生成非法文件。
+- **只列你改过的目录/文件**（上面的 `-- JustSmart.App/ README.md`），不要 `git diff HEAD` 全仓库——工控机上可能有本机没有的历史改动，全量 patch 会乱。
+- 新文件除 `git add -N` 外，也可用 `git diff --no-index --output=<part> <空文件> <file>` 单独生成后按字节拼接。
+- `AssemblyInfo.cs` 通常由 build.py 写入版本号，**不要放进 patch**。
+- `trailing whitespace` / `squelched N whitespace errors` 是 Windows CRLF 与远端 LF 差异的警告，不影响 apply。
+
+#### 第二步：上传到工控机
+
+```powershell
+$ipcExe = "D:\JustSmart\261010优易达安全带\工具软件\http_shell_cli_vnc_20260519_134037.exe"
+$ipUrl  = "http://192.168.1.34:10022"
+$patchDir = "D:/JustSmartAuto/_patches"
+$remoteRepo = "D:/JustSmartAuto/SeatBeltInspection_2611161012"
+
+# 先确保远端目录存在（/rfb/file/upload 目标 dir 必须已存在，否则报 "The system cannot find the path"）
+& $ipcExe -role client -url $ipUrl -timeout 10 -c "New-Item -ItemType Directory -Force -Path $patchDir | Out-Null; Write-Host OK"
+
+# curl /rfb/file/upload（multipart）
+$patchPath = "$env:TEMP\feat_my_changes.patch"
+curl.exe -sS -X POST "$ipUrl/rfb/file/upload" -F "file=@$patchPath" -F "path=$patchDir/feat_my_changes.patch"
+# 返回 {"status":"success","saved_as":"...","size":...}
+```
+
+#### 第三步：远端 apply patch + 编译
+
+```powershell
+# 远端先预览状态（可选）
+& $ipcExe -role client -url $ipUrl -timeout 15 -w $remoteRepo -c "git status --short | Select-Object -First 15; Write-Host '---'; git log --oneline -3"
+
+# dry-run 预检（零耗时，发现冲突立即停）
+& $ipcExe -role client -url $ipUrl -timeout 15 -w $remoteRepo -c "git apply --check $patchDir/feat_my_changes.patch 2>&1; Write-Host 'EXIT='$LASTEXITCODE"
+
+# 真 apply（优先不加 --reject，保证整体原子性；失败时按 5.1.1 生成增量 patch）
+& $ipcExe -role client -url $ipUrl -timeout 20 -w $remoteRepo -c "git apply $patchDir/feat_my_changes.patch 2>&1; Write-Host 'EXIT='$LASTEXITCODE"
+
+# 仅在明确需要逐文件落地时才用 --reject：会留下 .rej/.orig，下一次增量前必须清理
+# & $ipcExe -role client -url $ipUrl -timeout 20 -w $remoteRepo -c "git apply --reject $patchDir/feat_my_changes.patch 2>&1; Write-Host 'EXIT='$LASTEXITCODE"
+
+# 冲突后看 .rej：git apply --reject 会对冲突文件生成 .orig/.rej，
+# 再手动合并或先手动编辑解决后，跳过 reject 重跑 apply。
+& $ipcExe -role client -url $ipUrl -timeout 10 -w $remoteRepo -c "Get-ChildItem -Recurse -Filter *.rej | Select-Object FullName"
+```
+
+#### 第四步：远端编译（后台 + 日志重定向）
+
+build.py 编译 10-30 秒，`/exec` 有 30 秒上限会挂住。**必须用 `Start-Process -RedirectStandardOutput/Error` 后台跑 + 下载日志文件**：
+
+```powershell
+& $ipcExe -role client -url $ipUrl -timeout 10 -w $remoteRepo -c @"
+Start-Process -FilePath 'python' -ArgumentList 'build.py' -WorkingDirectory '$remoteRepo' `
+  -RedirectStandardOutput '$patchDir/build_out.txt' `
+  -RedirectStandardError  '$patchDir/build_err.txt' `
+  -NoNewWindow
+Write-Host 'BUILD_STARTED'
+"@
+
+# 等待（长任务放本地 sleep + 轮询）
+Start-Sleep -Seconds 40
+
+# 轮询：python 进程还在吗 + 日志是否已写完
+& $ipcExe -role client -url $ipUrl -timeout 10 -c @"
+`$p = Get-Process python -ErrorAction SilentlyContinue
+if (`$p) { Write-Host ('RUNNING PID=' + `$p.Id) } else { Write-Host 'DONE' }
+if (Test-Path '$patchDir/build_out.txt') { Get-Content '$patchDir/build_out.txt' -Tail 30 }
+if (Test-Path '$patchDir/build_err.txt') { Write-Host '---ERR---'; Get-Content '$patchDir/build_err.txt' -Tail 30 }
+"@
+
+# 成功判定：日志末尾有"编译成功" + 无 "error CS" / "Build FAILED"
+```
+
+#### 完整 checklist
+
+| 步骤 | 验证 |
+|------|------|
+| 本机 `git diff --output` 生成 patch | 文件大小合理（通常几十 KB）；首行是 `diff --git`，不是 `System.Object[]` 或 PowerShell 报错文本 |
+| 上传 | curl 返回 `"status":"success"` |
+| 是否已应用 | `git apply --reverse --check` 返回 0 时说明远端已是目标状态，跳过 apply |
+| dry-run | `git apply --check` 的 `EXIT=0`，无报错 |
+| apply | 优先 plain `git apply`（失败即整体不落地）；无 `.rej` 文件残留 |
+| 同步校验 | 两端源码 hash 清单逐路径一致（忽略 `AssemblyInfo.cs`） |
+| build | 日志末尾 `编译成功，耗时 ...，退出码 0` |
+
+#### 回滚
+
+apply 之后、编译之前想回滚：
+```powershell
+git apply --reverse $patchDir/feat_my_changes.patch
+```
+编译完了才发现有问题，用 `git stash` 或 `git reset --hard HEAD`（仅当远端所有改动都不要时）。
+
+#### 5.1.1 增量补丁：远端已应用过部分改动
+
+上一轮 patch 已 apply（新文件已存在、部分 hunk 已落地）后，再 apply 同一 patch 会报 `already exists` / `patch does not apply`。
+
+先判断是否已应用（`REV=0` 表示目标状态已达成，无需再 apply）：
+
+```powershell
+git apply --reverse --check $patchDir/xxx.patch; Write-Host "REV=$LASTEXITCODE"
+```
+
+需要继续同步剩余差异时，**以远端当前文件内容为基准**生成增量 patch，而不是继续用旧 patch：
+
+```powershell
+# 1) 用 /rfb/file/download 把远端当前文件取回本地临时目录
+$tmp = "$env:TEMP\remote_cur"; New-Item -ItemType Directory -Force $tmp | Out-Null
+
+# 2) 远端版本 vs 本地目标版本做 no-index diff（有差异时退出码为 1，属正常）
+git diff --no-index --output="$env:TEMP\np_1.patch" "$tmp\MainWindowViewModel.cs" `
+  "本地\JustSmart.App\MainWindowViewModel.cs"
+```
+
+把每个 part 的前 4 行改写为仓库相对路径，再按字节拼接：
+
+```powershell
+# Latin-1（28591）是字节到字符串的一一映射，中转不会破坏 UTF-8 中文
+$enc = [Text.Encoding]::GetEncoding(28591)
+$bytes = [IO.File]::ReadAllBytes($part)
+$s = $enc.GetString($bytes)
+# 头部 4 行改写为：
+#   diff --git a/<相对路径> b/<相对路径>
+#   index <old>..<new> <mode>
+#   --- a/<相对路径>
+#   +++ b/<相对路径>
+[IO.File]::WriteAllBytes($out, $enc.GetBytes($s))
+```
+
+关键：`<相对路径>` 必须是仓库相对路径（如 `JustSmart.App/MainWindowViewModel.cs`），远端 `git apply` 默认 `-p1` 才能落对位置。
+
+#### 5.1.2 同步完整性校验（两端 hash 清单）
+
+远端和本机各生成一份源码清单，按路径对比 `git hash-object` 结果：
+
+```powershell
+$exts = @(".cs",".xaml",".csproj",".slnx",".props",".config",".json",".xml",".targets")
+Get-ChildItem $root -Recurse -File -Force |
+  Where-Object { $_.FullName -notmatch '\\\.git\\|\\bin\\|\\obj\\|\\packages\\|\\\.vs\\|\\build_logs\\' -and ($exts -contains $_.Extension) } |
+  ForEach-Object {
+    $rel = $_.FullName.Substring($root.Length + 1).Replace("\","/")
+    "$rel`t" + (git hash-object -- $_.FullName)
+  } | Sort-Object | Out-File $inventory -Encoding ascii
+```
+
+注意：
+- `git hash-object` 不带 `--path` 时计算**原始字节**，两端必须用同样方式；
+- `AssemblyInfo.cs` 因 build.py 写入版本号必然不同，对比时忽略；
+- 本机未跟踪的新文件出现在清单里属正常差异，说明远端还没同步。
+
+#### 5.1.3 常见坑（实测）
+
+| 现象 | 原因 | 处理 |
+|------|------|------|
+| patch 首行是 `System.Object[]` | `StringBuilder.Append(字符串数组)` | 改用 `git diff --output` |
+| `git apply` 报 `patch failed at ...:1` | PowerShell 转码破坏 UTF-8 中文 | 用 `--output` 生成，不让 PowerShell 中转 |
+| `already exists` / `does not apply` | 远端已应用过该 patch | 先 `git apply --reverse --check` 判断；按远端当前内容生成增量 patch |
+| patch 成功但仍有 `error CS...` | 本地源码本身编译不过（WIP 状态） | 修本地源码 → 生成增量 patch → 重新 build，循环到 `编译成功`；不要直接在远端改源码，否则两端再次分叉 |
+| 远端 `AssemblyInfo.cs` 总是不同 | build.py 自动写版本号 | 校验 hash 时忽略该文件 |
+| `git apply --reject` 后目录里大量 `.rej/.orig` | 非原子应用留下半成品 | 增量同步场景优先 plain `git apply`；确需 `--reject` 时先清理 `.rej/.orig` 再算下一次增量 |
+
 ## 6. 远程桌面
 
 浏览器打开 `http://192.168.1.100:10022/vnc/vnc.html`，默认无密码。仅 Windows 工控机支持；服务端会自动复用已有的 RealVNC/TightVNC/UltraVNC，没有则启用内嵌 TightVNC（首次需要管理员权限）。
+
+### 6.1 VNC 突然崩溃 / 弹出 `R6025 pure virtual function call`
+
+现象：工控机屏幕上出现 `Microsoft Visual C++ Runtime Library` 弹窗，Program 为 `C:\Program Files\TightVNC\tvnserver.exe`，`R6025 - pure virtual function call`，VNC 页面随之黑屏或断开。
+
+- **定位**：`Get-WinEvent -FilterHashtable @{LogName='Application'; ProviderName='Application Error'}` 里看 `tvnserver.exe` 的 `0xc0000005` / `0x40000015`，再把崩溃时刻与 `JustSmart.App`（或任何需要提权的程序）的启动时间对齐——**精确到同一秒**即说明是 UAC 安全桌面切换打崩了 hook 抓屏。
+- **根因**：`PromptOnSecureDesktop=1` 时 UAC 提示会切到独立安全桌面，TightVNC 未装镜像驱动、靠 hook 抓屏，切桌面必崩；`R6025` 弹窗会把 `-desktopserver` 卡死，服务不会自动恢复。
+- **修复**：`Set-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System' -Name PromptOnSecureDesktop -Value 0 -Type DWord`（保留 UAC 确认，只是不再切安全桌面，改在交互桌面弹，远程也能点）。立即生效，无需重启。
+- **当场恢复**：杀掉卡在弹窗里的 `-desktopserver`（`Get-CimInstance Win32_Process -Filter "Name='tvnserver.exe'"` 里 CommandLine 含 `-desktopserver` 的那个），再 `Restart-Service tvnserver -Force`。验证：`5900` 监听 + `Invoke-WebRequest http://127.0.0.1:10022/vnc/vnc.html` 返回 200。
+- 正常实例形态只有三个：`-service`（services.exe 启动）、`-controlservice -slave`（explorer 登录时拉起）、`-desktopserver`（service 的子进程）。数量对不上或 `-desktopserver` 有多个，就是崩溃重启残留。
 
 ## 7. 常见问题
 
@@ -203,6 +402,17 @@ schtasks.exe /Create /TN LocalFileDropShell /SC ONSTART /RU SYSTEM /RL HIGHEST /
 - 核对三件事：`Triggers.CimClass.CimClassName = MSFT_TaskBootTrigger`、`Principal` 为 `SYSTEM / Highest / ServiceAccount`、`Get-ScheduledTaskInfo.LastTaskResult = 0`。任务跑完 bat 后状态回到 `Ready` 属正常（常驻进程已由 `start` 脱离）。
 - 验证时要区分端口归属：Go 版 HTTP Shell 的 `/health` 返回 `status=running`，本软件返回 `status=ok`。当 10022 被其他程序占用时，新实例应自动落到 10023 并返回 `ok`；用 `Get-NetTCPConnection -State Listen -LocalPort 10022,10023` 看 `OwningProcess`。
 - 更新版本时：先 `schtasks /End` + `Stop-Process` 旧 exe，改 bat 指向新 exe，再 `schtasks /Run`。旧构建留在目录里无副作用，但不要在 bat 里再引用。
+
+### 11.1 需要 VNC 且要求「无黑窗」时：VBS + 登录触发（实测可用）
+
+要保留 noVNC 页面就必须挂在交互式桌面上，`/SC ONSTART /RU SYSTEM` 会落进 session 0 导致 VNC 黑屏。此时改用：
+
+- **触发/身份**：`New-ScheduledTaskTrigger -AtLogOn -User <域\用户>` + `New-ScheduledTaskPrincipal -LogonType Interactive -RunLevel Highest`，并确认目标机 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon` 的 `AutoAdminLogon=1`（自动登录时等价于开机自启）。
+- **隐藏控制台**：任务动作写 `C:\Windows\System32\wscript.exe //B "D:\...\StartHttpShellServer.vbs"`，VBS 内 `sh.Run """exe"" -role server -host 0.0.0.0 -port 10022", 0, False`（窗口样式 0，不等待）。`schtasks` 的隐藏选项只隐藏任务本身，挡不住黑窗。
+- **VBS 编码**：必须 UTF-16LE 带 BOM（或纯 ASCII）。UTF-8 中文注释会被按 ANSI 解析，报 `缺少语句` 且无任何日志。
+- **端口递推**：从 10022 起逐个探测，占用就 +1，并把实际端口写进日志（`D:\JustSmartAuto\HttpShellServer.log`），否则重启后不知道落在哪个端口。
+- **探测监听状态**：VBS 里只能 `GetObject("winmgmts:\\.\root\StandardCimv2")` + `SELECT ... FROM MSFT_NetTCPConnection WHERE LocalPort=<p> AND State=2`（`State=2` 即 Listen）。写成 `CreateObject` 会报「ActiveX 部件不能创建对象」——`CreateObject` 不认 moniker。
+- **验证**：`Start-ScheduledTask` 后看 `LastTaskResult=0`、`Get-Process <exe> | Select MainWindowHandle` 为 0（无可见窗口）、`Get-NetTCPConnection -State Listen -LocalPort 10022,10023` 里新实例落在 10023、`/health` 返回 `running`。
 
 ## 12. 资源管理器「滚轮乱跳 / 列表弹回顶部」排查
 

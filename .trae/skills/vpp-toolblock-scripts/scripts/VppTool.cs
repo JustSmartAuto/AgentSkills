@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -371,6 +372,180 @@ class VppTool
             expected[path] = text;
             touched.Add(blk);
             touchedPath.Add(path);
+        }
+
+        // 3.5) 无条件给所有被 patch 的 ToolBlock 加 JustSmart.GlobalKV.dll 引用
+        // （补丁脚本里可能 using 了它，也可能没用；加进去无害）
+        log.WriteLine("=== ADD-REF PHASE START: touched=" + touched.Count + " appBin=" + appBin);
+        string gkvDll = Path.Combine(appBin, "JustSmart.GlobalKV.dll");
+        log.WriteLine("  gkvDll=" + gkvDll + " exists=" + File.Exists(gkvDll));
+        Type cogRefAsmType = null;
+        foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            cogRefAsmType = asm.GetType("Cognex.VisionPro.Implementation.Internal.CogReferencedAssembly");
+            if (cogRefAsmType != null) break;
+        }
+        log.WriteLine("  CogReferencedAssembly type = " + (cogRefAsmType == null ? "NOT FOUND" : cogRefAsmType.FullName));
+
+        // 探测并打印构造函数签名（供调试用）
+        if (cogRefAsmType != null)
+        {
+            log.WriteLine("  --- ctors ---");
+            foreach (ConstructorInfo ci in cogRefAsmType.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
+            {
+                var ps = ci.GetParameters();
+                string[] pss = new string[ps.Length];
+                for (int i = 0; i < ps.Length; i++) pss[i] = ps[i].ParameterType.Name + " " + ps[i].Name;
+                log.WriteLine("    ctor(" + string.Join(", ", pss) + ") " + (ci.IsPublic ? "public" : "non-public") + " static=" + ci.IsStatic);
+            }
+            log.WriteLine("  --- props ---");
+            foreach (PropertyInfo pi in cogRefAsmType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+            {
+                log.WriteLine("    " + pi.PropertyType.Name + " " + pi.Name + " canR=" + pi.CanRead + " canW=" + pi.CanWrite);
+            }
+        }
+
+        // 预先加载 GlobalKV DLL
+        Assembly gkvAsm = null;
+        if (File.Exists(gkvDll))
+        {
+            try { gkvAsm = Assembly.LoadFrom(gkvDll); log.WriteLine("  loaded GKV asm=" + gkvAsm.GetName().Name + " v=" + gkvAsm.GetName().Version); }
+            catch (Exception ex) { log.WriteLine("  load GKV failed: " + ex.Message); }
+        }
+
+        foreach (CogToolBlock blk in touched)
+        {
+            if (blk.Script == null) continue;
+
+            // 找 DLL 路径
+            string dllPath = gkvDll;
+            if (!File.Exists(dllPath))
+            {
+                string vp = Environment.GetEnvironmentVariable("VPRO_ROOT") ?? @"C:\Program Files\Cognex\VisionPro\";
+                dllPath = Path.Combine(vp, "ReferencedAssemblies", "JustSmart.GlobalKV.dll");
+            }
+            if (!File.Exists(dllPath)) { log.WriteLine("SKIP-REF GlobalKV.dll not found at " + dllPath); continue; }
+
+            // 检查是否已在 References 里
+            object refsObj = csType.GetProperty("References").GetValue(blk.Script, null);
+            ICollection refs = refsObj as ICollection;
+            bool already = false;
+            if (refs != null)
+            {
+                foreach (object r in refs)
+                {
+                    if (r != null)
+                    {
+                        string s = r.ToString();
+                        if (s.IndexOf("GlobalKV", StringComparison.OrdinalIgnoreCase) >= 0)
+                        { already = true; break; }
+                    }
+                }
+            }
+            if (already) continue;
+
+            // 用反射创建 CogReferencedAssembly 对象，依次尝试多种构造方式
+            if (refs is IList && cogRefAsmType != null)
+            {
+                object newRef = null;
+                Exception lastEx = null;
+
+                // 方案 1：ctor(Assembly) 单参数——把已加载的 GlobalKV Assembly 传进去
+                if (gkvAsm != null)
+                {
+                    try
+                    {
+                        newRef = Activator.CreateInstance(cogRefAsmType, gkvAsm);
+                        log.WriteLine("ADD-REF via ctor(Assembly) OK");
+                    }
+                    catch (Exception ex) { lastEx = ex; log.WriteLine("ADD-REF ctor(Assembly) FAIL: " + ex.Message); newRef = null; }
+                }
+
+                // 方案 2：三参数 ctor(String, String, CogReferencedAssemblyPathConstants)
+                if (newRef == null)
+                {
+                    try
+                    {
+                        // 两个 String 猜测分别是 filePath 和 directory，枚举值先试 0
+                        object pathConst0 = Enum.ToObject(cogRefAsmType.GetFields(BindingFlags.Public | BindingFlags.Static)
+                            .Select(f => f.FieldType).FirstOrDefault(t => t.IsEnum && t.Name.Contains("Path")), 0);
+                        // 或直接用 0 转
+                        newRef = Activator.CreateInstance(cogRefAsmType, dllPath, Path.GetDirectoryName(dllPath), 0);
+                        log.WriteLine("ADD-REF via ctor(String,String,0) OK");
+                    }
+                    catch (Exception ex) { lastEx = ex; log.WriteLine("ADD-REF ctor(String,String,0) FAIL: " + ex.Message); newRef = null; }
+                }
+
+                // 方案 3：克隆现有 References 里的对象
+                if (newRef == null && refs.Count > 0)
+                {
+                    try
+                    {
+                        // 用 BinaryFormatter 深拷贝第一个元素
+                        IEnumerator e = refs.GetEnumerator(); e.MoveNext();
+                        object template = e.Current;
+                        using (var ms = new MemoryStream())
+                        {
+                            var bf = new BinaryFormatter { AssemblyFormat = FormatterAssemblyStyle.Simple };
+                            bf.Serialize(ms, template);
+                            ms.Position = 0;
+                            newRef = bf.Deserialize(ms);
+                        }
+                        // 修改路径
+                        foreach (PropertyInfo pi in cogRefAsmType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+                        {
+                            if (pi.CanWrite)
+                            {
+                                try { pi.SetValue(newRef, dllPath, null); } catch { }
+                                try { pi.SetValue(newRef, Path.GetDirectoryName(dllPath), null); } catch { }
+                            }
+                        }
+                        log.WriteLine("ADD-REF via clone+modify OK");
+                    }
+                    catch (Exception ex) { lastEx = ex; log.WriteLine("ADD-REF clone FAIL: " + ex.Message); newRef = null; }
+                }
+
+                // 方案 4：无参构造 + 设置属性（最后兜底）
+                if (newRef == null)
+                {
+                    try
+                    {
+                        foreach (ConstructorInfo ci in cogRefAsmType.GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance))
+                        {
+                            if (ci.GetParameters().Length == 0)
+                            {
+                                newRef = ci.Invoke(null);
+                                foreach (PropertyInfo pi in cogRefAsmType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+                                {
+                                    if (pi.CanWrite)
+                                    {
+                                        try { pi.SetValue(newRef, dllPath, null); } catch { }
+                                        try { pi.SetValue(newRef, Path.GetDirectoryName(dllPath), null); } catch { }
+                                    }
+                                }
+                                log.WriteLine("ADD-REF via private-ctor+props OK");
+                                break;
+                            }
+                        }
+                        if (newRef == null) throw new Exception("所有构造方式都失败");
+                    }
+                    catch (Exception ex) { lastEx = ex; log.WriteLine("ADD-REF 全部方案失败: " + ex.Message); }
+                }
+
+                if (newRef != null)
+                {
+                    try { ((IList)refs).Add(newRef); log.WriteLine("ADD-REF GlobalKV.dll -> " + blk.GetType().Name + " via=" + newRef.GetType().Name); }
+                    catch (Exception ex) { log.WriteLine("ADD-REF FAILED add to list: " + ex.Message); }
+                }
+                else
+                {
+                    log.WriteLine("ADD-REF FAILED 无法创建 CogReferencedAssembly（所有方案耗尽）lastErr=" + (lastEx != null ? lastEx.Message : "null"));
+                }
+            }
+            else
+            {
+                log.WriteLine("SKIP-REF refs=" + (refs == null ? "null" : refs.GetType().Name) + " cogRefType=" + (cogRefAsmType == null ? "null" : "ok"));
+            }
         }
 
         // 4) 编译校验（不通过就不落盘）
